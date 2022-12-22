@@ -1,6 +1,6 @@
-from django.urls import path, include
+from django.urls import path
+from . import views
 
 urlpatterns = [
-    path('webCrawler/', include('webCrawler.urls')),
-    path('publicData/', include('publicData.urls')),
+    path('', views.index),
 ]
