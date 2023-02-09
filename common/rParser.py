@@ -4,6 +4,5 @@ import pandas as pd
 # https://sparkbyexamples.com/pandas/pandas-convert-json-to-dataframe/
 
 def convertJsonToDataframe(jsonData, jsonName):
-    # df2 = pd.read_json(jsonData.body, orient='items')
-    df2 = pd.json_normalize(jsonData[jsonName])
-    print(df2)
+    df = pd.json_normalize(jsonData[jsonName])
+    return df
