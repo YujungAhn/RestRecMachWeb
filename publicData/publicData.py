@@ -1,7 +1,11 @@
+import pandas as pd
 import requests
-from publicData.ServiceKey import KEY
 
-def getStoreListInDong(pageNo, numOfRows, areaCategory, areaCd):
+from common import rParser
+from publicData.ServiceKey import KEY
+import json
+
+def getStoreListInDong(pageNo, numOfRows, areaCategory, areaCd)-> json:
     """
     행정동 단위 상가업소 조회
     pageNo        # 페이지 번호
@@ -76,7 +80,6 @@ def getStoreListInDong(pageNo, numOfRows, areaCategory, areaCd):
     result = requests.get(url, params=params).json()
 
     return result
-
 
 
 def getCtprvnCds():
@@ -162,4 +165,34 @@ def getAdongCds(signguCd):
     result = requests.get(url, params=params).json()
 
     return result
+
+
+def getAllStoreListInDong(areaCd):
+    """
+    행정동 단위 상가업소 전체 조회
+    areaCd        # 행정동 코드 값
+    """
+
+    endFlag = False
+    pageCount = 1
+    pageRowSize = 10000
+    jsonName = 'items'
+
+    result_data = []
+
+    while endFlag is False:
+        pageCount += 1
+        storeList = getStoreListInDong(pageCount, pageRowSize, 'adongCd', areaCd)
+        jsonData = storeList['body']
+
+        if not jsonData.get(jsonName):
+            endFlag = True
+        else:
+            data = rParser.convertJsonToDataframe(jsonData, jsonName)
+            result_data.append(data)
+
+    result_data = pd.concat(result_data)
+
+    return result_data
+
 
