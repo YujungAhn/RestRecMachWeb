@@ -1,3 +1,5 @@
+from datetime import time
+
 import pandas as pd
 import requests
 
@@ -173,6 +175,9 @@ def getAllStoreListInDong(areaCd):
     areaCd        # 행정동 코드 값
     """
 
+    # # Time Test
+    # t = time.process_time()
+
     endFlag = False
     pageCount = 1
     pageRowSize = 10000
@@ -192,6 +197,17 @@ def getAllStoreListInDong(areaCd):
             result_data.append(data)
 
     result_data = pd.concat(result_data)
+
+    # api로 전달받은 컬럼명으로 dataframe 컬럼명 Rename
+    columns = storeList['header']['columns']
+    for num in range(len(columns)) :
+        result_data.rename(columns={result_data.columns[num]:columns[num]}, inplace=True)
+
+    # # Time Test
+    # elapsed_time = time.process_time() - t
+    # elapsed_time_toDatetime = str(pd.datetime.timedelta(minutes=elapsed_ time))
+    #
+    # # logging.debug('%s', elapsed_time_toDatetime)
 
     return result_data
 
