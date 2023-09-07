@@ -169,7 +169,7 @@ def getAdongCds(signguCd):
     return result
 
 
-def getAllStoreListInDong(areaCd):
+def getAllStoreListInDong(areaCd) -> pd.DataFrame:
     """
     행정동 단위 상가업소 전체 조회
     areaCd        # 행정동 코드 값
@@ -179,9 +179,10 @@ def getAllStoreListInDong(areaCd):
     # t = time.process_time()
 
     endFlag = False
-    pageCount = 1
-    pageRowSize = 10000
+    pageCount = 0
+    pageRowSize = 1000 #한번에 조회할 Row. 10000개 요청시 에러
     jsonName = 'items'
+    print(f"공공데이터 조회 pageRowSize : {pageRowSize} jsonName : {jsonName} areaCd : {areaCd}")
 
     result_data = []
 
@@ -191,10 +192,16 @@ def getAllStoreListInDong(areaCd):
         jsonData = storeList['body']
 
         if not jsonData.get(jsonName):
+            print(f"공공데이터 조회 page end")
             endFlag = True
         else:
+            print(f"공공데이터 조회 page : {pageCount}")
             data = rParser.convertJsonToDataframe(jsonData, jsonName)
             result_data.append(data)
+
+    if (len(result_data) == 0):
+        print(f"조회된 공공 데이터 데이터 없음")
+        return result_data
 
     result_data = pd.concat(result_data)
 
