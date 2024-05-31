@@ -3,13 +3,10 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 import time
 import numpy as np
-import tqdm
 from modeling.reviewData import ReviewData
 from modeling import reviewData
 
-# chromedriver = 'C:\chromedriver_win32\chromedriver\chrome-win64\chrome.exe' # 해당 경로에 버전에 맞는 크롬드라이버 다운로드 https://chromedriver.chromium.org/downloads
 driver = None
-# service = Service("C:\Windows\chromedriver.exe") driver = webdriver.Chrome(service=service)
 
 def findUrlinKakaoMap(keyword):
     '''
