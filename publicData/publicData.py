@@ -4,7 +4,7 @@ import pandas as pd
 import requests
 
 from common import rParser
-from publicData.ServiceKey import KEY
+from .ServiceKey import KEY
 import json
 
 def getStoreListInDong(pageNo, numOfRows, areaCategory, areaCd)-> json:
@@ -99,7 +99,7 @@ def getCtprvnCds():
     """
 
     url = 'http://apis.data.go.kr/B553077/api/open/sdsc2/baroApi'
-    params = {'serviceKey': KEY}  # 인증키
+    params = {'servicekey': KEY}  # 인증키
     params['resId'] = 'dong'      # 리소스에 대한 ID. dong은 행정구역 리소스를 나타냄
     params['catId'] = 'mega'      # 리소스에서 카테고리를 구분하는 항목. mega는 시도에 해당
     params['type'] = 'json'       # 데이터 유형 (xml, json)

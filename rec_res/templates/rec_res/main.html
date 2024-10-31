@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Stat 화면</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Stat 화면</h1>
+    <button id="fetch-data">데이터 가져오기</button>
+    <select id="data-output" placeholder="여기에 데이터가 표시됩니다.">
+        <option value="">선택하세요</option>  <!-- 기본 옵션 -->
+    </select>
+
+    <script>
+        $(document).ready(function() {
+            $('#fetch-data').click(function() {
+                $.ajax({
+                    url: '{% url "getCtprvnCds" %}',  // URL 이름으로 사용
+                    method: 'GET',
+                    success: function(data) {
+                        $('#data-output').empty();  // 이전 데이터 지우기
+                        $('#data-output').append('<option value="">선택하세요</option>');  // 기본 옵션 추가
+                        data.items.forEach(function(item) { // 배열에서 값을 가지고 옴 forEach, $.each(data, function(index,value){})
+                        $('#data-output').append(
+                            `<option value="${item.code}">${item.name}</option>`
+                        );
+                    });
+                    },
+                    error: function() {
+                        alert('데이터를 가져오는 데 실패했습니다.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

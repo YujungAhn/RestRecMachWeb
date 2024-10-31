@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'rest_framework', # RESTful API를 쉽게 만들도록 돕는  app
+    'rec_res'
 ]
 
 MIDDLEWARE = [
