@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from publicData import publicData
+from modeling import modeling
 
 # Create your views here.
 
@@ -48,7 +49,21 @@ def getAdongCds(request):
     else:
         return JsonResponse({'error': '시도 설정이 필요합니다.'}, status=400)
 
+def getRecommendedRest(request):
+    adongCd = request.GET.get('adongCd')  # 쿼리 파라미터에서 user_id 가져오기
+    restNm = request.GET.get('restNm')  # 쿼리 파라미터에서 user_id 가져오기
+    if not adongCd:
+        return JsonResponse({'error': '동 정보를 찾을 수 없습니다.'}, status=400)
+    if not adongCd:
+        return JsonResponse({'error': '레스토랑 정보를 찾을 수 없습니다.'}, status=400)
 
+    try:
+        data = modeling.recommandRes(restNm, adongCd)
+        response_data = {"items": data}
+
+        return JsonResponse(response_data, json_dumps_params={'ensure_ascii': False})  # ensure_ascii 한글 처리
+    except:
+        return JsonResponse({'error': '데이터를 찾을 수 없습니다.'}, status=404)
 
 def main_view(request):
     return render(request, 'rec_res/main.html')
