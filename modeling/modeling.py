@@ -11,13 +11,14 @@ import numpy as np
 import pandas as pd
 
 
-def recommandRes(name, areaCd, resCount):
+def recommandRes(name, areaCd):
     """
     상권 데이터, 리뷰데이터를 활용해 유사도가 높은 식당을 추천
     name : 식당 이름
     areaCd : 식당의 지역 코드
     resCount :
     """
+    resCount = 10
     # 동별 상권정보 정보 조회
     df = pd.DataFrame(publicData.getAllStoreListInDong(areaCd)) # 메소드 리스트를 가지고 오지 못하는 에러로 dataframe으로 타입 초기화
 
@@ -78,7 +79,7 @@ def recommandRes(name, areaCd, resCount):
     df = df.reset_index(drop=True)
 
     # 상세 페이지 url에서 원하는 데이터를 추출
-    for i, url in enumerate(tqdm_notebook(df['kakao_map_url'])):
+    for i, url in enumerate(df['kakao_map_url']):
         try:
             print(f"{i}행 데이터 : {url}")
             reviewData = webCrawler.findReviewInKakaoMapUrl(url)
@@ -114,7 +115,7 @@ def recommandRes(name, areaCd, resCount):
     df['cate_mix'] = df['cate_mix'].str.replace("/", " ")
 
     # 피쳐 벡터화
-    count_vect_category = CountVectorizer(min_df=0, ngram_range=(1, 2))
+    count_vect_category = CountVectorizer(min_df=0.0, ngram_range=(1, 2))
     place_category = count_vect_category.fit_transform(df['cate_mix'])
 
     # 코사인 유사도 계산
@@ -152,4 +153,6 @@ def recommandRes(name, areaCd, resCount):
     place_index = df[df['name'] == name].index.values
     similar_indexes = place_simi_co_sorted_ind[place_index, :resCount+1] # 출력을 원하는 유사한 음식점의 개수
     similar_indexes = similar_indexes.reshape(-1)
-    return df.iloc[similar_indexes]
+    result_df = df.iloc[similar_indexes]
+    result_json = result_df.to_json(orient='records', force_ascii=False)
+    return result_json

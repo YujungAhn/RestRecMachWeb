@@ -9,5 +9,6 @@ urlpatterns = [
     # 쿼리 파라미터
     path('getSignguCds', views.getSignguCds, name='getSignguCds'),
     path('getAdongCds', views.getAdongCds, name='getAdongCds'),
+    path('getRecommendedRest', views.getRecommendedRest, name='getRecommendedRest'),
     path('main/', views.main_view, name='main'),  # 새로운 URL 추가
 ]
